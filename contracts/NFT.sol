@@ -44,7 +44,6 @@ contract NFT is
     using StringsUpgradeable for uint256;
     using ECDSAUpgradeable for bytes32;
 
-    ProxyRegistry public constant PROXY_REGISTRY = ProxyRegistry(0xF57B2c51dED3A29e6891aba85459d600256Cf317);
     VRFCoordinatorV2Interface public constant VRF_COORDINATOR =
         VRFCoordinatorV2Interface(0x6168499c0cFfCaCD319c818142124B7A15E857ab);
     bytes32 public constant KEY_HASH = 0xd89b2bf150e3b9e13446986e571fb9cab24b13cea0a43ea20a6049a85cc807cc;
@@ -383,16 +382,6 @@ contract NFT is
             bytes(baseURI).length != 0
                 ? string(abi.encodePacked(baseURI, revealedID.toString(), ".json"))
                 : "baseuri not set correctly";
-    }
-
-    function isApprovedForAll(address _owner, address operator) public view override returns (bool) {
-        // Whitelist OpenSea Proxy.
-
-        if (address(PROXY_REGISTRY.proxies(_owner)) == operator) {
-            return true;
-        }
-
-        return super.isApprovedForAll(_owner, operator);
     }
 
     function withdrawMoney() external nonReentrant {

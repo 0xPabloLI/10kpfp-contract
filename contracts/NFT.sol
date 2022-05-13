@@ -5,7 +5,6 @@ pragma solidity ^0.8.4;
 import "./ERC721AUpgradeable.sol";
 import "./interfaces/IMerkleDistributor.sol";
 import "./utils/VRFConsumerBaseV2Upgradeable.sol";
-import "./utils/ProxyRegistry.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/StringsUpgradeable.sol";
@@ -369,7 +368,8 @@ contract NFT is
         uint256[] memory tempID = new uint256[](MAX_SUPPLY);
 
         //Adapt Knuth-Durstenfeld shuffle algorithm to fully randomize ID
-        for (tailIndex; tailIndex > tokenId - 1; tailIndex--) {    //only loop the ID to the tail
+        for (tailIndex; tailIndex > tokenId - 1; tailIndex--) {
+            //only loop the ID to the tail
             tempID[_initialRandomIndex] = (tempID[tailIndex] == 0 ? tailIndex + 1 : tempID[tailIndex]);
             //No tail data is stored since they don't affect final ID anymore
 

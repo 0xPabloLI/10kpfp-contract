@@ -49,7 +49,6 @@ contract NFT is
 
     uint256 public MAX_SUPPLY;
 
-    uint256 public s_randomWord;
     uint256 public s_requestId;
 
     uint256 public maxPerAddressDuringMint;
@@ -95,7 +94,7 @@ contract NFT is
     event PreSalesMint(uint256 indexed index, address indexed account, uint256 amount, uint256 maxMint);
     event PublicSaleMint(address indexed user, uint256 number, uint256 totalCost);
     event AuctionMint(address indexed user, uint256 number, uint256 totalCost);
-    event Revealed(uint256 requestId, string baseURI, bool revealed);
+    event Revealed(uint256 requestId, uint256 randomWord, string baseURI, bool revealed);
 
     function initialize(
         string memory name_,
@@ -447,6 +446,6 @@ contract NFT is
 
         revealed = true;
 
-        emit Revealed(requestId, _baseTokenURI, true);
+        emit Revealed(requestId, randomWords[0], _baseTokenURI, true);
     }
 }

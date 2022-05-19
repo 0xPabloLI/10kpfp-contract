@@ -321,7 +321,6 @@ contract NFT is
 
     function reveal(string calldata baseURI) external onlyOwner {
         if (revealed) revert AlreadyRevealed();
-        if (initialRandomIndex != 0) revert AlreadySetStartingIndex();
 
         ChainLinkConfig memory config = chainLinkConfig;
 

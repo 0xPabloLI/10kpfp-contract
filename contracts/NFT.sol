@@ -345,7 +345,7 @@ contract NFT is
 
         uint256 _initialRandomIndex = initialRandomIndex;
 
-        string memory baseURI = _baseURI();
+        string memory baseURI = _baseTokenURI;
         uint256 tailIndex = MAX_SUPPLY - 1;
 
         uint256[] memory tempID = new uint256[](MAX_SUPPLY);
@@ -406,7 +406,7 @@ contract NFT is
         return 1;
     }
 
-    function _baseURI() internal view virtual override returns (string memory) {
+    function baseURI() public view returns (string memory) {
         return _baseTokenURI;
     }
 

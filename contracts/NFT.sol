@@ -335,21 +335,6 @@ contract NFT is
         setBaseURI(baseURI);
     }
 
-    function updateChainLinkConfig(
-        bytes32 keyhash_,
-        uint16 requestConfirmations_,
-        uint32 callbackGasLimit_
-    ) external onlyOwner {
-        ChainLinkConfig memory config = chainLinkConfig;
-
-        chainLinkConfig = ChainLinkConfig(
-            keyhash_,
-            config.s_subscriptionId,
-            callbackGasLimit_,
-            requestConfirmations_,
-            config.numWords
-        );
-    }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         if (!_exists(tokenId)) revert NonexistentToken();

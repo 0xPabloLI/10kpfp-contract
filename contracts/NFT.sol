@@ -49,7 +49,6 @@ contract NFT is
 
     uint256 public MAX_SUPPLY;
 
-    uint256 public s_randomWord;
     uint256 public s_requestId;
 
     uint256 public maxPerAddressDuringMint;
@@ -95,7 +94,7 @@ contract NFT is
     event PreSalesMint(uint256 indexed index, address indexed account, uint256 amount, uint256 maxMint);
     event PublicSaleMint(address indexed user, uint256 number, uint256 totalCost);
     event AuctionMint(address indexed user, uint256 number, uint256 totalCost);
-    event Revealed(uint256 requestId, string baseURI, bool revealed);
+    event Revealed(uint256 requestId, uint256 randomWord, string baseURI, bool revealed);
 
     function initialize(
         string memory name_,
@@ -322,7 +321,6 @@ contract NFT is
 
     function reveal(string calldata baseURI) external onlyOwner {
         if (revealed) revert AlreadyRevealed();
-        if (initialRandomIndex != 0) revert AlreadySetStartingIndex();
 
         ChainLinkConfig memory config = chainLinkConfig;
 
@@ -337,21 +335,6 @@ contract NFT is
         setBaseURI(baseURI);
     }
 
-    function updateChainLinkConfig(
-        bytes32 keyhash_,
-        uint16 requestConfirmations_,
-        uint32 callbackGasLimit_
-    ) external onlyOwner {
-        ChainLinkConfig memory config = chainLinkConfig;
-
-        chainLinkConfig = ChainLinkConfig(
-            keyhash_,
-            config.s_subscriptionId,
-            callbackGasLimit_,
-            requestConfirmations_,
-            config.numWords
-        );
-    }
 
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         if (!_exists(tokenId)) revert NonexistentToken();
@@ -362,7 +345,7 @@ contract NFT is
 
         uint256 _initialRandomIndex = initialRandomIndex;
 
-        string memory baseURI = _baseURI();
+        string memory baseURI = _baseTokenURI;
         uint256 tailIndex = MAX_SUPPLY - 1;
 
         uint256[] memory tempID = new uint256[](MAX_SUPPLY);
@@ -423,7 +406,7 @@ contract NFT is
         return 1;
     }
 
-    function _baseURI() internal view virtual override returns (string memory) {
+    function baseURI() public view returns (string memory) {
         return _baseTokenURI;
     }
 
@@ -447,6 +430,6 @@ contract NFT is
 
         revealed = true;
 
-        emit Revealed(requestId, _baseTokenURI, true);
+        emit Revealed(requestId, randomWords[0], _baseTokenURI, true);
     }
 }
